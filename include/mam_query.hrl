@@ -7,7 +7,8 @@
 -type property() :: {'with', jid:jid()} |
                     {'start', erlang:timestamp()} |
                     {'end', erlang:timestamp()} |
-                    {'withtext', binary()}.
+                    {'withtext', binary()} |
+                    {'thread', binary()}.
 -type result() :: [property()].
 
 -type form() :: [property() | xdata_field()].

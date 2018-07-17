@@ -223,6 +223,8 @@ get_mod(<<"max-items-exceeded">>,
 	<<"http://jabber.org/protocol/pubsub#errors">>) ->
     xep0060;
 get_mod(<<"x">>, <<"jabber:x:conference">>) -> xep0249;
+get_mod(<<"thread">>, <<"urn:xmpp:mam:tmp">>) ->
+    xep0313;
 get_mod(<<"jid">>, <<"urn:xmpp:mam:1">>) -> xep0313;
 get_mod(<<"never">>, <<"urn:xmpp:mam:0">>) -> xep0313;
 get_mod(<<"item">>,
@@ -1424,7 +1426,6 @@ get_mod({ps_unsubscribe, _, _, _}) -> xep0060;
 get_mod({sm_resume, _, _, _}) -> xep0198;
 get_mod({push_enable, _, _, _}) -> xep0357;
 get_mod({vcard_geo, _, _}) -> xep0054;
-get_mod({mam_query, _, _, _, _, _, _, _, _}) -> xep0313;
 get_mod({xevent, _, _, _, _, _}) -> xep0022;
 get_mod({db_result, _, _, _, _, _}) -> xep0220;
 get_mod({bookmark_conference, _, _, _, _, _}) ->
@@ -1498,6 +1499,8 @@ get_mod({vcard_tel, _, _, _, _, _, _, _, _, _, _, _, _,
     xep0054;
 get_mod({vcard_photo, _, _, _}) -> xep0054;
 get_mod({ps_publish, _, _}) -> xep0060;
+get_mod({mam_query, _, _, _, _, _, _, _, _, _}) ->
+    xep0313;
 get_mod({search_item, _, _, _, _, _}) -> xep0055;
 get_mod({xcaptcha, _}) -> xep0158;
 get_mod({avatar_data, _}) -> xep0084;

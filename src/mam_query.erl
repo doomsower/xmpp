@@ -81,6 +81,8 @@ encode(List, Lang) when is_list(List) ->
 	    {'end', _, _} -> erlang:error({badarg, Opt});
 	    {withtext, Val} -> [encode_withtext(Val, Lang)];
 	    {withtext, _, _} -> erlang:error({badarg, Opt});
+	    {thread, Val} -> [encode_thread(Val, Lang)];
+	    {thread, _, _} -> erlang:error({badarg, Opt});
 	    #xdata_field{} -> [Opt];
 	    _ -> []
 	  end
@@ -179,6 +181,30 @@ decode([#xdata_field{var = <<"withtext">>} | _], _,
        XMLNS, _) ->
     erlang:error({?MODULE,
 		  {too_many_values, <<"withtext">>, XMLNS}});
+decode([#xdata_field{var = <<"thread">>,
+		     values = [Value]}
+	| Fs],
+       Acc, XMLNS, Required) ->
+    try Value of
+      Result ->
+	  decode(Fs, [{thread, Result} | Acc], XMLNS, Required)
+    catch
+      _:_ ->
+	  erlang:error({?MODULE,
+			{bad_var_value, <<"thread">>, XMLNS}})
+    end;
+decode([#xdata_field{var = <<"thread">>, values = []} =
+	    F
+	| Fs],
+       Acc, XMLNS, Required) ->
+    decode([F#xdata_field{var = <<"thread">>,
+			  values = [<<>>]}
+	    | Fs],
+	   Acc, XMLNS, Required);
+decode([#xdata_field{var = <<"thread">>} | _], _, XMLNS,
+       _) ->
+    erlang:error({?MODULE,
+		  {too_many_values, <<"thread">>, XMLNS}});
 decode([#xdata_field{var = Var} | Fs], Acc, XMLNS,
        Required) ->
     if Var /= <<"FORM_TYPE">> ->
@@ -229,3 +255,14 @@ encode_withtext(Value, Lang) ->
 		 required = false, type = 'text-single', options = Opts,
 		 desc = <<>>,
 		 label = xmpp_tr:tr(Lang, <<"Search the text">>)}.
+
+encode_thread(Value, Lang) ->
+    Values = case Value of
+	       <<>> -> [];
+	       Value -> [Value]
+	     end,
+    Opts = [],
+    #xdata_field{var = <<"thread">>, values = Values,
+		 required = false, type = 'text-single', options = Opts,
+		 desc = <<>>,
+		 label = xmpp_tr:tr(Lang, <<"Search by thread">>)}.
