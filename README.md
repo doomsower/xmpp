@@ -1,3 +1,7 @@
+# Modifications
+
+- Added thread to XEP-0313
+
 Erlang/Elixir XMPP library
 ==========================
 
